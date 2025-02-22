@@ -1,42 +1,42 @@
 /* Add custom styles that can't be handled by Material-UI sx prop */
 .MuiPaper-root {
-    transition: box-shadow 0.3s ease-in-out;
-  }
-  
-  .MuiButton-root {
-    text-transform: none !important;
-  }
-  
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.MuiButton-root {
+  text-transform: none !important;
+}
+
+.MuiDialog-paper {
+  border-radius: 12px !important;
+}
+
+/* Toast styles */
+.Toastify__toast {
+  font-family: 'Roboto', sans-serif;
+  border-radius: 8px;
+}
+
+.Toastify__toast--success {
+  background: #4caf50;
+}
+
+.Toastify__toast--error {
+  background: #f44336;
+}
+
+/* Table hover effects */
+.MuiTableRow-root:hover {
+  background-color: rgba(25, 118, 210, 0.04) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
   .MuiDialog-paper {
-    border-radius: 12px !important;
+    margin: 16px !important;
   }
   
-  /* Toast styles */
-  .Toastify__toast {
-    font-family: 'Roboto', sans-serif;
-    border-radius: 8px;
+  .MuiPaper-root {
+    padding: 16px !important;
   }
-  
-  .Toastify__toast--success {
-    background: #4caf50;
-  }
-  
-  .Toastify__toast--error {
-    background: #f44336;
-  }
-  
-  /* Table hover effects */
-  .MuiTableRow-root:hover {
-    background-color: rgba(25, 118, 210, 0.04) !important;
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 600px) {
-    .MuiDialog-paper {
-      margin: 16px !important;
-    }
-    
-    .MuiPaper-root {
-      padding: 16px !important;
-    }
-  }
+}
