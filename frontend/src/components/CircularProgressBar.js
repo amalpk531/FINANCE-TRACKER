@@ -5,21 +5,21 @@ const CircularProgressBar = ({ percentage, color }) => {
   const radius = 45;
   const circumference = 2 * Math.PI * radius;
   const progress = ((100 - percentage) / 100) * circumference;
-
+  
   const [isAnimating, setIsAnimating] = useState(false);
-
+  
   useEffect(() => {
     setIsAnimating(true);
   }, []);
-
+  
   const circleStyle = {
     '--circumference': circumference,
     '--progress': progress,
     '--color': color,
   };
-
+  
   return (
-    <div className="circular-progressbar">
+    <div className="circular-progressbar-background">
       <svg viewBox="0 0 100 100">
         <circle
           className="circle bg"

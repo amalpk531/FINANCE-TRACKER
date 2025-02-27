@@ -1,24 +1,63 @@
-.containerBox{
+.containerBox {
     height: 100%;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
 }
 
-.avatarBox{
+.avatarBox {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     flex-direction: column;
-
+    gap: 15px;
 }
 
-.avatar:hover{
-    border: 0.4rem solid blueviolet;
+.avatar {
+    border: 3px solid transparent;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+}
 
+.avatar:hover {
+    border: 0.4rem solid #7e57c2; /* Changed from blueviolet to a slightly softer purple */
+    transform: scale(1.05);
     transition: 0.5s ease-in-out;
     cursor: pointer;
+    box-shadow: 0 6px 12px rgba(126, 87, 194, 0.15);
 }
 
-.selected{
-    border: 0.4rem solid blueviolet !important; 
+.selected {
+    border: 0.4rem solid #7e57c2 !important; /* Changed from blueviolet to match hover state */
+    box-shadow: 0 4px 8px rgba(126, 87, 194, 0.2);
 }
 
+.avatarName {
+    font-weight: 500;
+    color: #333333;
+    margin-top: 8px;
+    text-align: center;
+}
+
+.avatarGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 20px;
+    width: 100%;
+    padding: 10px;
+}
+
+@media (max-width: 768px) {
+    .avatarGrid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 15px;
+    }
+    
+    .avatar:hover {
+        transform: scale(1.03);
+    }
+}
