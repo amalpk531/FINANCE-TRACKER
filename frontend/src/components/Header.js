@@ -1,101 +1,102 @@
-// NavbarComponent.js
-import React, { useCallback, useEffect, useState } from 'react';
-import { Navbar, Nav, Button } from 'react-bootstrap';
-import "./style.css";
-import { useNavigate } from 'react-router-dom';
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
+import React from "react";
+import { Navbar, Container, Nav, NavDropdown, Image } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { FaSignOutAlt, FaUser, FaUserEdit } from "react-icons/fa";
+
 const Header = () => {
-  
-const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [user, setUser] = React.useState(null);
 
-  const handleShowLogin = () =>{
-    navigate("/login");
-  }
-
-  const [user, setUser] = useState();
-
-  useEffect(() => {
-    
-      if (localStorage.getItem("user")) {
-        const user = JSON.parse(localStorage.getItem("user"));
-        
-        setUser(user);
-        
-      }
-
-
-    
+  React.useEffect(() => {
+    // Load user data from localStorage on component mount
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
   }, []);
 
-  const handleShowLogout = () => {
+  const handleLogout = () => {
+    // Clear local storage
     localStorage.removeItem("user");
+    // Navigate to login page
     navigate("/login");
-  }
+  };
 
-  const particlesInit = useCallback(async (engine) => {
-    // console.log(engine);
-    await loadFull(engine);
-  }, []);
-
-  const particlesLoaded = useCallback(async (container) => {
-    // await console.log(container);
-  }, []);
-  
   return (
-    <>
-    <div style={{ position: 'relative', overflow: 'hidden' }}>
-    <Particles
-  id="tsparticles"
-  style={{
-    position: 'absolute',
-    zIndex: -1,  // Change this value
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  }}
-
-      />
-    <Navbar className="navbarCSS" collapseOnSelect expand="lg" style={{position: 'relative', zIndex: "2 !important"}}>
-      {/* <Navbar className="navbarCSS" collapseOnSelect expand="lg" bg="dark" variant="dark"> */}
-        <Navbar.Brand href="/" className="text-black navTitle">finance tracker</Navbar.Brand>
-        <Navbar.Toggle
-            aria-controls="basic-navbar-nav"
-            style={{
-              backgroundColor: "transparent",
-              borderColor: "transparent",
-            }}
-          >
-            <span
-              className="navbar-toggler-icon"
-              style={{
-                background: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")`,
-              }}
-            ></span>
-          </Navbar.Toggle>
-        <div>
-        <Navbar.Collapse id="responsive-navbar-nav" style={{color: "white"}}>
-          {user ? (
-            <>
-            <Nav>
-                <Button variant="primary" onClick={handleShowLogout} className="ml-2">Logout</Button>
-              </Nav>
-            </>
-          ) : (
-
-            <>
-              <Nav>
-                <Button variant="primary" onClick={handleShowLogin} className="ml-2">Login</Button>
-              </Nav>
-            </>
-          )}
-          
+    <Navbar bg="white" expand="lg" className="shadow-sm">
+      <Container>
+        <LinkContainer to="/">
+          <Navbar.Brand className="fw-bold">
+            <span className="text-primary">Finance</span>Tracker
+          </Navbar.Brand>
+        </LinkContainer>
+        
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        
+        <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+          <Nav>
+            {user ? (
+              <NavDropdown 
+                title={
+                  <div className="d-inline-flex align-items-center">
+                    {user.avatarImage ? (
+                      <Image 
+                        src={user.avatarImage} 
+                        alt="User Avatar" 
+                        width={32} 
+                        height={32} 
+                        className="rounded-circle me-2 border" 
+                      />
+                    ) : (
+                      <div className="bg-primary text-white rounded-circle me-2 d-flex align-items-center justify-content-center" style={{ width: "32px", height: "32px" }}>
+                        <FaUser size={16} />
+                      </div>
+                    )}
+                    <span>{user.username || "User"}</span>
+                  </div>
+                } 
+                id="user-dropdown"
+                align="end"
+              >
+                <LinkContainer to="/profile">
+                  <NavDropdown.Item className="d-flex align-items-center">
+                    <FaUser className="me-2" size={16} />
+                    Profile
+                  </NavDropdown.Item>
+                </LinkContainer>
+                
+                <LinkContainer to="/setAvatar">
+                  <NavDropdown.Item className="d-flex align-items-center">
+                    <FaUserEdit className="me-2" size={16} />
+                    Change Avatar
+                  </NavDropdown.Item>
+                </LinkContainer>
+                
+                <NavDropdown.Divider />
+                
+                <NavDropdown.Item 
+                  onClick={handleLogout}
+                  className="d-flex align-items-center text-danger"
+                >
+                  <FaSignOutAlt className="me-2" size={16} />
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
+            ) : (
+              <>
+                <LinkContainer to="/login">
+                  <Nav.Link>Login</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/register">
+                  <Nav.Link>Register</Nav.Link>
+                </LinkContainer>
+              </>
+            )}
+          </Nav>
         </Navbar.Collapse>
-      </div>
-      </Navbar>
-      </div>
-    </>
+      </Container>
+    </Navbar>
   );
 };
 
