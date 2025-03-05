@@ -217,7 +217,7 @@ const TableData = ({ data, user }) => {
                   >
                     <option value="Credit" className="text-black">Credit</option>
                     <option value="Expense" className="text-black">Debit</option>
-                    <option value="Loan" className="text-black">Loan</option>
+                    
                   </Form.Select>
                 </div>
               </div>
