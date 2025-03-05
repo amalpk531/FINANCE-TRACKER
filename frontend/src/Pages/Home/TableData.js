@@ -22,14 +22,38 @@ const TableData = ({ data, user }) => {
     transactionType: "",
   });
 
+  // Transaction Categories
+  const categories = [
+    "Groceries", 
+    "Rent", 
+    "Salary", 
+    "Tip", 
+    "Food", 
+    "Medical", 
+    "Utilities", 
+    "Entertainment", 
+    "Transportation", 
+    "Loan",
+    "Other"
+  ];
+
   // Handle edit click
   const handleEditClick = (itemId) => {
-    console.log("Clicked button ID:", itemId);
     if (data.length > 0) {
       const editTran = data.filter((item) => item._id === itemId);
       setCurrId(itemId);
       setEditingTransaction(editTran);
       handleShow();
+      
+      // Pre-fill the form with existing transaction data
+      setValues({
+        title: editTran[0].title,
+        amount: editTran[0].amount,
+        description: editTran[0].description,
+        category: editTran[0].category,
+        date: moment(editTran[0].date).format("YYYY-MM-DD"),
+        transactionType: editTran[0].transactionType
+      });
     }
   };
 
@@ -50,11 +74,11 @@ const TableData = ({ data, user }) => {
       });
 
       if (response.success === true) {
-        await handleClose();
-        await setRefresh(!refresh);
+        handleClose();
+        setRefresh(!refresh);
         window.location.reload();
       } else {
-        console.log("Error updating transaction");
+        console.error("Error updating transaction");
       }
     } catch (error) {
       console.error("Failed to update transaction:", error);
@@ -64,19 +88,15 @@ const TableData = ({ data, user }) => {
   // Handle delete transaction
   const handleDeleteClick = async (itemId) => {
     try {
-      console.log(user._id);
-      console.log("Clicked button ID delete:", itemId);
-      setCurrId(itemId);
-      
       const { data: response } = await axios.post(`${deleteTransactions}/${itemId}`, {
         userId: user._id,
       });
 
       if (response.success === true) {
-        await setRefresh(!refresh);
+        setRefresh(!refresh);
         window.location.reload();
       } else {
-        console.log("Error deleting transaction");
+        console.error("Error deleting transaction");
       }
     } catch (error) {
       console.error("Failed to delete transaction:", error);
@@ -88,35 +108,51 @@ const TableData = ({ data, user }) => {
     setTransactions(data);
   }, [data, user, refresh]);
 
+  // Determine transaction type color and badge
+  const getTransactionTypeBadge = (type) => {
+    switch(type) {
+      case 'Credit': return 'badge bg-success text-white';
+      case 'Expense': return 'badge bg-danger text-white';
+      case 'Loan': return 'badge bg-warning text-dark';
+      default: return 'badge bg-secondary text-white';
+    }
+  };
+
   return (
-    <Container>
-      <Table responsive="md" className="data-table">
-        <thead>
+    <Container fluid className="px-4">
+      <Table responsive hover striped className="shadow-sm">
+        <thead className="bg-primary">
           <tr>
-            <th>Date</th>
-            <th>Title</th>
-            <th>Amount</th>
-            <th>Type</th>
-            <th>Category</th>
-            <th>Action</th>
+            <th className="text-white">Date</th>
+            <th className="text-white">Title</th>
+            <th className="text-white">Amount</th>
+            <th className="text-white">Type</th>
+            <th className="text-white">Category</th>
+            <th className="text-white">Actions</th>
           </tr>
         </thead>
-        <tbody className="text-white">
+        <tbody className="text-black">
           {data.map((item, index) => (
-            <tr key={index}>
+            <tr key={index} className="align-middle">
               <td>{moment(item.date).format("YYYY-MM-DD")}</td>
               <td>{item.title}</td>
-              <td>{item.amount}</td>
-              <td>{item.transactionType}</td>
+              <td className="fw-bold">{item.amount}</td>
+              <td>
+                <span className={getTransactionTypeBadge(item.transactionType)}>
+                  {item.transactionType}
+                </span>
+              </td>
               <td>{item.category}</td>
               <td>
-                <div className="icons-handle">
+                <div className="d-flex gap-2">
                   <EditNoteIcon
-                    sx={{ cursor: "pointer" }}
+                    className="text-primary"
+                    style={{ cursor: "pointer" }}
                     onClick={() => handleEditClick(item._id)}
                   />
                   <DeleteForeverIcon
-                    sx={{ color: "red", cursor: "pointer" }}
+                    className="text-danger"
+                    style={{ cursor: "pointer" }}
                     onClick={() => handleDeleteClick(item._id)}
                   />
                 </div>
@@ -128,88 +164,85 @@ const TableData = ({ data, user }) => {
 
       {/* Edit Transaction Modal */}
       {editingTransaction && (
-        <Modal show={show} onHide={handleClose} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Update Transaction Details</Modal.Title>
+        <Modal show={show} onHide={handleClose} centered size="lg">
+          <Modal.Header closeButton className="bg-light">
+            <Modal.Title className="text-black">Update Transaction Details</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group className="mb-3" controlId="formName">
-                <Form.Label>Title</Form.Label>
-                <Form.Control
-                  name="title"
-                  type="text"
-                  placeholder={editingTransaction[0].title}
-                  value={values.title}
-                  onChange={handleChange}
-                />
-              </Form.Group>
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <Form.Label className="text-black">Title</Form.Label>
+                  <Form.Control
+                    name="title"
+                    type="text"
+                    placeholder="Enter transaction title"
+                    value={values.title}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6 mb-3">
+                  <Form.Label className="text-black">Amount</Form.Label>
+                  <Form.Control
+                    name="amount"
+                    type="number"
+                    placeholder="Enter amount"
+                    value={values.amount}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
 
-              <Form.Group className="mb-3" controlId="formAmount">
-                <Form.Label>Amount</Form.Label>
-                <Form.Control
-                  name="amount"
-                  type="number"
-                  placeholder={editingTransaction[0].amount}
-                  value={values.amount}
-                  onChange={handleChange}
-                />
-              </Form.Group>
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <Form.Label className="text-black">Category</Form.Label>
+                  <Form.Select
+                    name="category"
+                    value={values.category}
+                    onChange={handleChange}
+                  >
+                    {categories.map((category, index) => (
+                      <option key={index} value={category} className="text-black">
+                        {category}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </div>
+                <div className="col-md-6 mb-3">
+                  <Form.Label className="text-black">Transaction Type</Form.Label>
+                  <Form.Select
+                    name="transactionType"
+                    value={values.transactionType}
+                    onChange={handleChange}
+                  >
+                    <option value="Credit" className="text-black">Credit</option>
+                    <option value="Expense" className="text-black">Debit</option>
+                    <option value="Loan" className="text-black">Loan</option>
+                  </Form.Select>
+                </div>
+              </div>
 
-              <Form.Group className="mb-3" controlId="formSelect">
-                <Form.Label>Category</Form.Label>
-                <Form.Select
-                  name="category"
-                  value={values.category}
-                  onChange={handleChange}
-                >
-                  <option value="">{editingTransaction[0].category}</option>
-                  <option value="Groceries">Groceries</option>
-                  <option value="Rent">Rent</option>
-                  <option value="Salary">Salary</option>
-                  <option value="Tip">Tip</option>
-                  <option value="Food">Food</option>
-                  <option value="Medical">Medical</option>
-                  <option value="Utilities">Utilities</option>
-                  <option value="Entertainment">Entertainment</option>
-                  <option value="Transportation">Transportation</option>
-                  <option value="Other">Other</option>
-                </Form.Select>
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formDescription">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="description"
-                  placeholder={editingTransaction[0].description}
-                  value={values.description}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formSelect1">
-                <Form.Label>Transaction Type</Form.Label>
-                <Form.Select
-                  name="transactionType"
-                  value={values.transactionType}
-                  onChange={handleChange}
-                >
-                  <option value="">{editingTransaction[0].transactionType}</option>
-                  <option value="Credit">Credit</option>
-                  <option value="Expense">Debit</option>
-                </Form.Select>
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formDate">
-                <Form.Label>Date</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="date"
-                  value={values.date}
-                  onChange={handleChange}
-                />
-              </Form.Group>
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <Form.Label className="text-black">Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="date"
+                    value={values.date}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6 mb-3">
+                  <Form.Label className="text-black">Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="description"
+                    placeholder="Enter description"
+                    value={values.description}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
             </Form>
           </Modal.Body>
           <Modal.Footer>
@@ -217,7 +250,7 @@ const TableData = ({ data, user }) => {
               Close
             </Button>
             <Button variant="primary" onClick={handleEditSubmit}>
-              Submit
+              Update Transaction
             </Button>
           </Modal.Footer>
         </Modal>

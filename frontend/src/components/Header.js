@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar, Container, Nav, NavDropdown, Image } from "react-bootstrap";
+import { Navbar, Container, Nav, Dropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaSignOutAlt, FaUser, FaUserEdit } from "react-icons/fa";
@@ -12,7 +12,12 @@ const Header = () => {
     // Load user data from localStorage on component mount
     const userData = localStorage.getItem("user");
     if (userData) {
-      setUser(JSON.parse(userData));
+      try {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
     }
   }, []);
 
@@ -37,52 +42,58 @@ const Header = () => {
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav>
             {user ? (
-              <NavDropdown 
-                title={
-                  <div className="d-inline-flex align-items-center">
-                    {user.avatarImage ? (
-                      <Image 
-                        src={user.avatarImage} 
-                        alt="User Avatar" 
-                        width={32} 
-                        height={32} 
-                        className="rounded-circle me-2 border" 
-                      />
-                    ) : (
-                      <div className="bg-primary text-white rounded-circle me-2 d-flex align-items-center justify-content-center" style={{ width: "32px", height: "32px" }}>
-                        <FaUser size={16} />
-                      </div>
-                    )}
-                    <span>{user.username || "User"}</span>
-                  </div>
-                } 
-                id="user-dropdown"
-                align="end"
-              >
-                <LinkContainer to="/profile">
-                  <NavDropdown.Item className="d-flex align-items-center">
-                    <FaUser className="me-2" size={16} />
-                    Profile
-                  </NavDropdown.Item>
-                </LinkContainer>
-                
-                <LinkContainer to="/setAvatar">
-                  <NavDropdown.Item className="d-flex align-items-center">
-                    <FaUserEdit className="me-2" size={16} />
-                    Change Avatar
-                  </NavDropdown.Item>
-                </LinkContainer>
-                
-                <NavDropdown.Divider />
-                
-                <NavDropdown.Item 
-                  onClick={handleLogout}
-                  className="d-flex align-items-center text-danger"
+              <Dropdown align="end">
+                <Dropdown.Toggle 
+                  variant="outline-none" 
+                  id="user-dropdown" 
+                  className="d-flex align-items-center border-0"
                 >
-                  <FaSignOutAlt className="me-2" size={16} />
-                  Logout
-                </NavDropdown.Item>
-              </NavDropdown>
+                  {user.avatarImage ? (
+                    <img 
+                      src={user.avatarImage} 
+                      alt="User Avatar" 
+                      className="rounded-circle me-2 border" 
+                      style={{ width: "32px", height: "32px", objectFit: "cover" }} 
+                    />
+                  ) : (
+                    <div 
+                      className="bg-primary text-white rounded-circle me-2 d-flex align-items-center justify-content-center" 
+                      style={{ width: "32px", height: "32px" }}
+                    >
+                      <FaUser size={16} />
+                    </div>
+                  )}
+                  <span className="d-none d-md-inline">
+                    {user.name || "User"}
+                  </span>
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <LinkContainer to="/profile">
+                    <Dropdown.Item className="d-flex align-items-center">
+                      <FaUser className="me-2" size={16} />
+                      Profile
+                    </Dropdown.Item>
+                  </LinkContainer>
+                  
+                  <LinkContainer to="/setAvatar">
+                    <Dropdown.Item className="d-flex align-items-center">
+                      <FaUserEdit className="me-2" size={16} />
+                      Change Avatar
+                    </Dropdown.Item>
+                  </LinkContainer>
+                  
+                  <Dropdown.Divider />
+                  
+                  <Dropdown.Item 
+                    onClick={handleLogout}
+                    className="d-flex align-items-center text-danger"
+                  >
+                    <FaSignOutAlt className="me-2" size={16} />
+                    Logout
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             ) : (
               <>
                 <LinkContainer to="/login">

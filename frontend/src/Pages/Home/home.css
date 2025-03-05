@@ -2,195 +2,75 @@
 
 /* -------- Base Variables -------- */
 :root {
-    /* Colors */
-    --primary-color: #62b869;
-    --primary-hover: #3a7bc8;
-    --background-color: #ffffff;
-    --secondary-bg: #ffffff;
-    --tertiary-bg: #ffffff;
-    --text-color: #000000;
-    --text-secondary: #495057;
-    --text-light: #6c757d;
-    --border-color: #ffffff;
-    --border-light: #e9ecef;
-    --border-focus: rgba(74, 144, 226, 0.15);
-    
-    /* Spacing */
-    --spacing-xs: 5px;
-    --spacing-sm: 8px;
-    --spacing-md: 12px;
-    --spacing-lg: 15px;
-    --spacing-xl: 20px;
-    
-    /* Shadows */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
-    
-    /* Border Radius */
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    --radius-lg: 8px;
-  }
+  /* Colors */
+  --primary-color: #62b869;
+  --primary-hover: #3a7bc8;
+  --background-color: #ffffff;
+  --secondary-bg: #ffffff;
+  --tertiary-bg: #ffffff;
+  --text-color: #000000;
+  --text-secondary: #495057;
+  --text-light: #6c757d;
+  --border-color: #ffffff;
+  --border-light: #e9ecef;
+  --border-focus: rgba(74, 144, 226, 0.15);
   
-  /* -------- Container Overrides -------- */
+  /* Spacing */
+  --spacing-xs: 5px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 15px;
+  --spacing-xl: 20px;
   
-  /* -------- View Toggle Icons -------- */
-  .MuiSvgIcon-root {
-    padding: var(--spacing-xs);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
   
-  .MuiSvgIcon-root.bg-primary {
-    background-color: var(--primary-color);
-    color: white;
-  }
-  
-  .MuiSvgIcon-root.text-secondary {
-    color: var(--text-secondary);
-  }
-  
-  .MuiSvgIcon-root:hover {
-    transform: scale(1.1);
-  }
-  
-  /* -------- Table Styling -------- */
-  .data-table {
-    border-collapse: collapse;
-    width: 100%;
-    height: 500px;
-    background-color: var(--background-color);
-    overflow: hidden;
-  }
-  
-  .data-table thead th {
-    background-color: var(--secondary-bg);
-    color: var(--text-secondary);
-    font-weight: 600;
-    padding: var(--spacing-md) var(--spacing-lg);
-    text-align: left;
-    border-bottom: 2px solid var(--border-light);
-  }
-  
-  .data-table tbody td {
-    border-bottom: 1px solid var(--border-light);
-    padding: var(--spacing-md) var(--spacing-lg);
-    color: var(--text-secondary);
-  }
-  
-  .data-table tbody tr {
-    transition: background-color 0.2s;
-    color: var(--text-color) !important;
-  }
-  
-  .data-table tbody tr:hover {
-    background-color: var(--secondary-bg);
-    cursor: pointer;
-  }
-  
-  .data-table tbody tr:nth-child(even) {
-    background-color: var(--tertiary-bg);
-  }
-  
-  .data-table tbody tr:last-child {
-    border-bottom: none;
-  }
-  
-  /* -------- Form Elements -------- */
-  input, select, .form-control, .form-select {
-    border: 1px solid var(--border-light) !important;
-    border-radius: var(--radius-sm) !important;
-    padding: var(--spacing-sm) var(--spacing-md) !important;
-    background-color: var(--background-color) !important;
-    color: var(--text-secondary) !important;
-    transition: border-color 0.2s, box-shadow 0.2s !important;
-  }
-  
-  input:focus, select:focus, .form-control:focus, .form-select:focus {
-    border-color: var(--primary-color) !important;
-    outline: none !important;
-    box-shadow: 0 0 0 3px var(--border-focus) !important;
-  }
-  
-  .form-label {
-    color: var(--text-secondary) !important;
-    font-weight: 500 !important;
-    margin-bottom: 6px !important;
-  }
-  
-  /* -------- Buttons -------- */
-  .btn-primary {
-    background-color: var(--primary-color) !important;
-    border-color: var(--primary-color) !important;
-    border-radius: var(--radius-md) !important;
-    font-weight: 500 !important;
-    transition: all 0.2s !important;
-  }
-  
-  .btn-primary:hover {
-    background-color: var(--primary-hover) !important;
-    border-color: var(--primary-hover) !important;
-    transform: translateY(-1px) !important;
-    box-shadow: var(--shadow-sm) !important;
-  }
-  
-  .btn-outline-secondary {
-    background-color: var(--background-color) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-secondary) !important;
-    border-radius: var(--radius-md) !important;
-    font-weight: 500 !important;
-    transition: all 0.2s !important;
-  }
-  
-  .btn-outline-secondary:hover {
-    background-color: var(--secondary-bg) !important;
-    color: var(--text-color) !important;
-    transform: translateY(-1px) !important;
-    box-shadow: var(--shadow-sm) !important;
-  }
-  
-  /* -------- DatePicker Styling -------- */
-  .react-datepicker-wrapper {
-    width: 100%;
-  }
-  
-  .react-datepicker__input-container input {
-    width: 100%;
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    color: var(--text-secondary);
-  }
-  
-  /* -------- Modal Styling -------- */
-  .modal-content {
-    border-radius: var(--radius-lg) !important;
-    border: none !important;
-    box-shadow: var(--shadow-lg) !important;
-  }
-  
-  .modal-header {
-    background-color: var(--secondary-bg) !important;
-    border-bottom: 1px solid var(--border-light) !important;
-    padding: var(--spacing-lg) var(--spacing-xl) !important;
-  }
-  
-  .modal-header .modal-title {
-    color: var(--text-color) !important;
-    font-weight: 600 !important;
-  }
-  
-  .modal-body {
-    padding: var(--spacing-xl) !important;
-  }
-  
-  .modal-footer {
-    border-top: 1px solid var(--border-light) !important;
-    padding: var(--spacing-lg) var(--spacing-xl) !important;
-    background-color: var(--secondary-bg) !important;
-  }
-  
-  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
+
+/* -------- Table Styling -------- */
+.data-table {
+  border-collapse: collapse;
+  width: 100%;
+  height: 500px;
+  background-color: var(--background-color);
+  overflow: hidden;
+}
+
+.data-table thead th {
+  background-color: var(--secondary-bg);
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-align: left;
+  border-bottom: 2px solid var(--border-light);
+}
+
+.data-table tbody td {
+  border-bottom: 1px solid var(--border-light);
+  padding: var(--spacing-md) var(--spacing-lg);
+  color: var(--text-secondary);
+}
+
+.data-table tbody tr {
+  transition: background-color 0.2s;
+  color: var(--text-color) !important;
+}
+
+.data-table tbody tr:hover {
+  background-color: var(--secondary-bg);
+  cursor: pointer;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background-color: var(--tertiary-bg);
+}
+
+.data-table tbody tr:last-child {
+  border-bottom: none;
+}

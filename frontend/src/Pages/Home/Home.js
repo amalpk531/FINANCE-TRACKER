@@ -301,144 +301,60 @@ const Home = () => {
           </Col>
         </Row>
 
-        {/* Action Bar */}
-        <Card className="mb-4 border-0 shadow-sm">
-          <Card.Body>
-            <Row className="align-items-center">
-              <Col xs={6} md={3} className="mb-3 mb-md-0">
-                <Button 
-                  variant="primary" 
-                  className="w-100 d-flex align-items-center justify-content-center gap-2"
-                  onClick={handleShow}
-                >
-                  <FaPlus size={14} />
-                  <span className="d-none d-sm-inline">Add Transaction</span>
-                  <span className="d-inline d-sm-none">Add</span>
-                </Button>
-              </Col>
-              
-              <Col xs={6} md={3} className="mb-3 mb-md-0">
-                <Button 
-                  variant="outline-secondary" 
-                  className="w-100 d-flex align-items-center justify-content-center gap-2"
-                  onClick={() => setShowFilters(!showFilters)}
-                >
-                  <FaFilter size={14} />
-                  <span className="d-none d-sm-inline">
-                    {showFilters ? "Hide Filters" : "Show Filters"}
-                  </span>
-                  <span className="d-inline d-sm-none">Filter</span>
-                </Button>
-              </Col>
-              
-              <Col xs={12} md={6} className="d-flex justify-content-end">
-                <div className="btn-group">
-                  <Button 
-                    variant={view === "table" ? "primary" : "outline-primary"}
-                    onClick={handleTableClick}
-                    className="d-flex align-items-center gap-2"
-                  >
-                    <FaTable size={14} />
-                    <span className="d-none d-md-inline">Table</span>
-                  </Button>
-                  <Button 
-                    variant={view === "chart" ? "primary" : "outline-primary"}
-                    onClick={handleChartClick}
-                    className="d-flex align-items-center gap-2"
-                  >
-                    <FaChartBar size={14} />
-                    <span className="d-none d-md-inline">Analytics</span>
-                  </Button>
-                </div>
-              </Col>
-            </Row>
-            
-            {/* Filters Section */}
-            {showFilters && (
-              <div className="mt-4 pt-3 border-top">
-                <Row className="align-items-end">
-                  <Col md={3} sm={6} className="mb-3">
-                    <Form.Group controlId="formSelectFrequency">
-                      <Form.Label className="fw-bold small">Time Period</Form.Label>
-                      <Form.Select
-                        name="frequency"
-                        value={frequency}
-                        onChange={handleChangeFrequency}
-                        className="border"
-                      >
-                        <option value="7">Last Week</option>
-                        <option value="30">Last Month</option>
-                        <option value="365">Last Year</option>
-                        <option value="custom">Custom Range</option>
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
+       {/* Action Bar */}
+<Card className="mb-4 border-0 shadow-sm">
+  <Card.Body>
+    <Row className="align-items-center">
+      <Col xs={6} md={3} className="mb-3 mb-md-0">
+        <Button 
+          variant="outline-primary" 
+          className="w-100 d-flex align-items-center justify-content-center gap-2"
+          onClick={handleShow}
+        >
+          <FaPlus size={14} />
+          <span className="d-none d-sm-inline">Add Transaction</span>
+          <span className="d-inline d-sm-none">Add</span>
+        </Button>
+      </Col>
 
-                  <Col md={3} sm={6} className="mb-3">
-                    <Form.Group controlId="formSelectType">
-                      <Form.Label className="fw-bold small">Transaction Type</Form.Label>
-                      <Form.Select
-                        name="type"
-                        value={type}
-                        onChange={handleSetType}
-                        className="border"
-                      >
-                        <option value="all">All Transactions</option>
-                        <option value="expense">Expenses Only</option>
-                        <option value="credit">Income Only</option>
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
+      <Col xs={6} md={3} className="mb-3 mb-md-0">
+        <Button 
+          variant="outline-primary" 
+          className="w-100 d-flex align-items-center justify-content-center gap-2"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          <FaFilter size={14} />
+          <span className="d-none d-sm-inline">
+            {showFilters ? "Hide Filters" : "Show Filters"}
+          </span>
+          <span className="d-inline d-sm-none">Filter</span>
+        </Button>
+      </Col>
 
-                  {frequency === "custom" && (
-                    <>
-                      <Col md={3} sm={6} className="mb-3">
-                        <Form.Group>
-                          <Form.Label className="fw-bold small">Start Date</Form.Label>
-                          <DatePicker
-                            selected={startDate}
-                            onChange={handleStartChange}
-                            selectsStart
-                            startDate={startDate}
-                            endDate={endDate}
-                            className="form-control border"
-                            placeholderText="Select start date"
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col md={3} sm={6} className="mb-3">
-                        <Form.Group>
-                          <Form.Label className="fw-bold small">End Date</Form.Label>
-                          <DatePicker
-                            selected={endDate}
-                            onChange={handleEndChange}
-                            selectsEnd
-                            startDate={startDate}
-                            endDate={endDate}
-                            minDate={startDate}
-                            className="form-control border"
-                            placeholderText="Select end date"
-                          />
-                        </Form.Group>
-                      </Col>
-                    </>
-                  )}
+      <Col xs={12} md={6} className="d-flex justify-content-end">
+        <div className="btn-group">
+          <Button 
+            variant={view === "table" ? "primary" : "outline-primary"}
+            onClick={handleTableClick}
+            className="d-flex align-items-center gap-2"
+          >
+            <FaChartBar size={14} />
+            <span className="d-none d-md-inline">Table</span>
+          </Button>
+          <Button 
+            variant={view === "chart" ? "primary" : "outline-primary"}
+            onClick={handleChartClick}
+            className="d-flex align-items-center gap-2"
+          >
+            <FaChartBar size={14} />
+            <span className="d-none d-md-inline">Analytics</span>
+          </Button>
+        </div>
+      </Col>
+    </Row>
+  </Card.Body>
+</Card>
 
-                  <Col md={frequency === "custom" ? 12 : 6} className="mb-3 d-flex justify-content-end">
-                    <Button 
-                      variant="outline-secondary" 
-                      onClick={handleReset}
-                      className="d-flex align-items-center gap-2"
-                    >
-                      <FaUndo size={14} />
-                      <span>Reset Filters</span>
-                    </Button>
-                  </Col>
-                </Row>
-              </div>
-            )}
-          </Card.Body>
-        </Card>
 
         {/* Main Content */}
         <Card className="border-0 shadow-sm">
