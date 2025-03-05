@@ -442,6 +442,7 @@ const Home = () => {
                       <option value="Utilities">Utilities</option>
                       <option value="Entertainment">Entertainment</option>
                       <option value="Transportation">Transportation</option>
+                      <option value="loan">loan</option>
                       <option value="Other">Other</option>
                     </Form.Select>
                   </Form.Group>
