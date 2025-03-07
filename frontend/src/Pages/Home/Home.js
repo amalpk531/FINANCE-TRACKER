@@ -321,67 +321,8 @@ const Home = () => {
       
       <Container className="py-4">
         
-        {/* Summary Cards */}
-        <Row className="mb-4">
-          <Col md={4} className="mb-3 mb-md-0">
-            <Card className="h-100 shadow-sm border-0">
-              <Card.Body className="d-flex flex-column justify-content-between">
-                <div className="d-flex justify-content-between">
-                  <Card.Title className="fs-6 text-muted">Income</Card.Title>
-                  <button onClick={handleShow}><div className="bg-success bg-opacity-10 circle p-2">
-                    <FaPlus className="text-success" />
-                  </div></button>
-                </div>
-                <h3 className="mt-3 text-success">₹{summary.income}</h3>
-                <div className="mt-2 text-muted small">
-                  {transactionCounts.income} transactions
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-          
-          <Col md={4} className="mb-3 mb-md-0">
-            <Card className="h-100 shadow-sm border-0">
-              <Card.Body className="d-flex flex-column justify-content-between">
-                <div className="d-flex justify-content-between">
-                  <Card.Title className="fs-6 text-muted">Expenses</Card.Title>
-                  <button onClick={handleShow}><div className="bg-danger bg-opacity-10 circle p-2">
-                    <FaPlus className="text-danger" style={{ transform: 'rotate(45deg)' }} />
-                    </div> </button>
-                </div>
-                <h3 className="mt-3 text-danger">₹{summary.expense}</h3>
-                <div className="mt-2 text-muted small">
-                  {transactionCounts.expense} transactions
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-          
-          <Col md={4}>
-            <Card className="h-100 shadow-sm border-0">
-              <Card.Body className="d-flex flex-column justify-content-between">
-                <div className="d-flex justify-content-between">
-                  <Card.Title className="fs-6 text-muted">Balance</Card.Title>
-                  <button onClick={handleShow}><div className="bg-primary bg-opacity-10 circle p-2">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
-                      <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M22 2L12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div></button>
-                </div>
-                <h3 className={`mt-3 ${Number(summary.balance) >= 0 ? 'text-primary' : 'text-danger'}`}>
-                ₹{summary.balance}
-                </h3>
-                <div className="mt-2 text-muted small">
-                  {transactionCounts.total} total transactions
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-
         {/* Action Bar */}
-        <Card className="mb-4 border-0 shadow-sm">
+        <Card className=" border-0 shadow-sm">
           <Card.Body>
             <Row className="align-items-center">
               <Col xs={6} md={3} className="mb-3 mb-md-0">
@@ -413,20 +354,21 @@ const Home = () => {
               <Col xs={12} md={6} className="d-flex justify-content-end">
                 <div className="btn-group">
                   <Button 
-                    variant={view === "table" ? "primary" : "outline-primary"}
-                    onClick={handleTableClick}
-                    className="d-flex align-items-center gap-2"
-                  >
-                    <FaTable size={14} />
-                    <span className="d-none d-md-inline">Table</span>
-                  </Button>
-                  <Button 
                     variant={view === "chart" ? "primary" : "outline-primary"}
                     onClick={handleChartClick}
                     className="d-flex align-items-center gap-2"
                   >
-                    <FaChartBar size={14} />
+                    <FaTable size={14} />
                     <span className="d-none d-md-inline">Analytics</span>
+                  </Button>
+                  <Button 
+                    variant={view === "table" ? "primary" : "outline-primary"}
+                    
+                    onClick={handleTableClick}
+                    className="d-flex align-items-center gap-2"
+                  >
+                    <FaChartBar size={14} />
+                    <span className="d-none d-md-inline">Table</span>
                   </Button>
                 </div>
               </Col>
@@ -434,6 +376,85 @@ const Home = () => {
           </Card.Body>
         </Card>
 
+        {/* Filters Section */}
+        {showFilters && (
+          <Card className="mb-4 border-0 shadow-sm">
+            <Card.Body>
+              <Row>
+                <Col md={4}>
+                  <Form.Group className="mb-3" controlId="formSelectFrequency">
+                    <Form.Label>Select Frequency</Form.Label>
+                    <Form.Select
+                      name="frequency"
+                      value={frequency}
+                      onChange={handleChangeFrequency}
+                    >
+                      <option value="7">Last Week</option>
+                      <option value="30">Last Month</option>
+                      <option value="365">Last Year</option>
+                      <option value="custom">Custom</option>
+                    </Form.Select>
+                  </Form.Group>
+                  
+                  {frequency === "custom" && (
+                    <Row>
+                      <Col>
+                        <Form.Group className="mb-3">
+                          <Form.Label>Start Date</Form.Label>
+                          <DatePicker
+                            selected={startDate}
+                            onChange={handleStartChange}
+                            dateFormat="yyyy-MM-dd"
+                            className="form-control"
+                            placeholderText="Start Date"
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col>
+                        <Form.Group className="mb-3">
+                          <Form.Label>End Date</Form.Label>
+                          <DatePicker
+                            selected={endDate}
+                            onChange={handleEndChange}
+                            dateFormat="yyyy-MM-dd"
+                            className="form-control"
+                            placeholderText="End Date"
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                  )}
+                </Col>
+                
+                <Col md={4}>
+                  <Form.Group className="mb-3" controlId="formSelectType">
+                    <Form.Label>Type</Form.Label>
+                    <Form.Select
+                      name="type"
+                      value={type}
+                      onChange={handleSetType}
+                    >
+                      <option value="all">All</option>
+                      <option value="expense">Expense</option>
+                      <option value="credit">Income</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+                
+                <Col md={4} className="d-flex align-items-end">
+                  <Button 
+                    variant="outline-secondary" 
+                    className="mb-3 d-flex align-items-center gap-2"
+                    onClick={handleReset}
+                  >
+                    <FaUndo size={14} />
+                    Reset Filters
+                  </Button>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        )}
         {/* Main Content */}
         <Card className="border-0 shadow-sm">
           <Card.Body className={transactions.length === 0 ? "text-center py-5" : ""}>

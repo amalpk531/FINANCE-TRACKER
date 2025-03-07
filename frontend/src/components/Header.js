@@ -69,20 +69,12 @@ const Header = () => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <LinkContainer to="/profile">
+                  <LinkContainer to="/setAvatar">
                     <Dropdown.Item className="d-flex align-items-center">
                       <FaUser className="me-2" size={16} />
                       Profile
                     </Dropdown.Item>
-                  </LinkContainer>
-                  
-                  <LinkContainer to="/setAvatar">
-                    <Dropdown.Item className="d-flex align-items-center">
-                      <FaUserEdit className="me-2" size={16} />
-                      Change Avatar
-                    </Dropdown.Item>
-                  </LinkContainer>
-                  
+                  </LinkContainer>                  
                   <Dropdown.Divider />
                   
                   <Dropdown.Item 
