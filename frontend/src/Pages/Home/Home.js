@@ -47,7 +47,7 @@ const Home = () => {
   const [type, setType] = useState("all");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [view, setView] = useState("table");
+  const [view, setView] = useState("chart");
   const [showFilters, setShowFilters] = useState(false);
   const [transactionCounts, setTransactionCounts] = useState({
     total: 0,
