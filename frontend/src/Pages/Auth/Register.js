@@ -237,7 +237,7 @@ const Register = () => {
                 width: "100%"
               }}
             >
-            Welcome to Expense Management System
+            Welcome to Expense Tracker
           </Typography>
           <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 3 }}>
             Registration
