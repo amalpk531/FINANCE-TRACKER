@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -6,13 +6,15 @@ import "react-toastify/dist/ReactToastify.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
-
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
 // Components
 import Header from "../../components/Header";
 import Spinner from "../../components/Spinner";
 import TableData from "./TableData";
 import Analytics from "./Analytics";
 import { Button, Modal, Form, Container, Row, Col, Card } from "react-bootstrap";
+
 
 // Icons
 import { FaTable, FaChartBar, FaPlus, FaFilter, FaUndo } from "react-icons/fa";
@@ -234,14 +236,91 @@ const Home = () => {
   };
 
   const summary = calculateSummary();
+  
+  // Particles.js configuration
+  const particlesInit = useCallback(async (engine) => {
+    await loadFull(engine);
+  }, []);
+  
+  const particlesLoaded = useCallback(async (container) => {
+    // Particle load handling if needed
+  }, []);
 
   return (
     <>
+      <Particles
+        id="tsparticles"
+        init={particlesInit}
+        loaded={particlesLoaded}
+        options={{
+          background: {
+            color: {
+              value: "#f5f5f5",
+            },
+          },
+          fpsLimit: 60,
+          particles: {
+            number: {
+              value: 200,
+              density: {
+                enable: true,
+                value_area: 800,
+              },
+            },
+            color: {
+              value: "#1976d2",
+            },
+            shape: {
+              type: "circle",
+            },
+            opacity: {
+              value: 0.3,
+              random: true,
+            },
+            size: {
+              value: 3,
+              random: { enable: true, minimumValue: 1 },
+            },
+            links: {
+              enable: false,
+            },
+            move: {
+              enable: true,
+              speed: 2,
+            },
+            life: {
+              duration: {
+                sync: false,
+                value: 3,
+              },
+              count: 0,
+              delay: {
+                random: {
+                  enable: true,
+                  minimumValue: 0.5,
+                },
+                value: 1,
+              },
+            },
+          },
+          detectRetina: true,
+        }}
+        style={{
+          position: "absolute",
+          zIndex: 0,
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+      />
+
       <Header />
 
       {loading && <Spinner />}
       
       <Container className="py-4">
+        
         {/* Summary Cards */}
         <Row className="mb-4">
           <Col md={4} className="mb-3 mb-md-0">
@@ -249,9 +328,9 @@ const Home = () => {
               <Card.Body className="d-flex flex-column justify-content-between">
                 <div className="d-flex justify-content-between">
                   <Card.Title className="fs-6 text-muted">Income</Card.Title>
-                  <div className="bg-success bg-opacity-10 rounded-circle p-2">
+                  <button onClick={handleShow}><div className="bg-success bg-opacity-10 circle p-2">
                     <FaPlus className="text-success" />
-                  </div>
+                  </div></button>
                 </div>
                 <h3 className="mt-3 text-success">₹{summary.income}</h3>
                 <div className="mt-2 text-muted small">
@@ -266,9 +345,9 @@ const Home = () => {
               <Card.Body className="d-flex flex-column justify-content-between">
                 <div className="d-flex justify-content-between">
                   <Card.Title className="fs-6 text-muted">Expenses</Card.Title>
-                  <div className="bg-danger bg-opacity-10 rounded-circle p-2">
+                  <button onClick={handleShow}><div className="bg-danger bg-opacity-10 circle p-2">
                     <FaPlus className="text-danger" style={{ transform: 'rotate(45deg)' }} />
-                  </div>
+                    </div> </button>
                 </div>
                 <h3 className="mt-3 text-danger">₹{summary.expense}</h3>
                 <div className="mt-2 text-muted small">
@@ -283,12 +362,12 @@ const Home = () => {
               <Card.Body className="d-flex flex-column justify-content-between">
                 <div className="d-flex justify-content-between">
                   <Card.Title className="fs-6 text-muted">Balance</Card.Title>
-                  <div className="bg-primary bg-opacity-10 rounded-circle p-2">
+                  <button onClick={handleShow}><div className="bg-primary bg-opacity-10 circle p-2">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
                       <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       <path d="M22 2L12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                  </div>
+                  </div></button>
                 </div>
                 <h3 className={`mt-3 ${Number(summary.balance) >= 0 ? 'text-primary' : 'text-danger'}`}>
                 ₹{summary.balance}
@@ -301,60 +380,59 @@ const Home = () => {
           </Col>
         </Row>
 
-       {/* Action Bar */}
-<Card className="mb-4 border-0 shadow-sm">
-  <Card.Body>
-    <Row className="align-items-center">
-      <Col xs={6} md={3} className="mb-3 mb-md-0">
-        <Button 
-          variant="outline-primary" 
-          className="w-100 d-flex align-items-center justify-content-center gap-2"
-          onClick={handleShow}
-        >
-          <FaPlus size={14} />
-          <span className="d-none d-sm-inline">Add Transaction</span>
-          <span className="d-inline d-sm-none">Add</span>
-        </Button>
-      </Col>
+        {/* Action Bar */}
+        <Card className="mb-4 border-0 shadow-sm">
+          <Card.Body>
+            <Row className="align-items-center">
+              <Col xs={6} md={3} className="mb-3 mb-md-0">
+                <Button 
+                  variant="outline-primary" 
+                  className="w-100 d-flex align-items-center justify-content-center gap-2"
+                  onClick={handleShow}
+                >
+                  <FaPlus size={14} />
+                  <span className="d-none d-sm-inline">Add Transaction</span>
+                  <span className="d-inline d-sm-none">Add</span>
+                </Button>
+              </Col>
 
-      <Col xs={6} md={3} className="mb-3 mb-md-0">
-        <Button 
-          variant="outline-primary" 
-          className="w-100 d-flex align-items-center justify-content-center gap-2"
-          onClick={() => setShowFilters(!showFilters)}
-        >
-          <FaFilter size={14} />
-          <span className="d-none d-sm-inline">
-            {showFilters ? "Hide Filters" : "Show Filters"}
-          </span>
-          <span className="d-inline d-sm-none">Filter</span>
-        </Button>
-      </Col>
+              <Col xs={6} md={3} className="mb-3 mb-md-0">
+                <Button 
+                  variant="outline-primary" 
+                  className="w-100 d-flex align-items-center justify-content-center gap-2"
+                  onClick={() => setShowFilters(!showFilters)}
+                >
+                  <FaFilter size={14} />
+                  <span className="d-none d-sm-inline">
+                    {showFilters ? "Hide Filters" : "Show Filters"}
+                  </span>
+                  <span className="d-inline d-sm-none">Filter</span>
+                </Button>
+              </Col>
 
-      <Col xs={12} md={6} className="d-flex justify-content-end">
-        <div className="btn-group">
-          <Button 
-            variant={view === "table" ? "primary" : "outline-primary"}
-            onClick={handleTableClick}
-            className="d-flex align-items-center gap-2"
-          >
-            <FaChartBar size={14} />
-            <span className="d-none d-md-inline">Table</span>
-          </Button>
-          <Button 
-            variant={view === "chart" ? "primary" : "outline-primary"}
-            onClick={handleChartClick}
-            className="d-flex align-items-center gap-2"
-          >
-            <FaChartBar size={14} />
-            <span className="d-none d-md-inline">Analytics</span>
-          </Button>
-        </div>
-      </Col>
-    </Row>
-  </Card.Body>
-</Card>
-
+              <Col xs={12} md={6} className="d-flex justify-content-end">
+                <div className="btn-group">
+                  <Button 
+                    variant={view === "table" ? "primary" : "outline-primary"}
+                    onClick={handleTableClick}
+                    className="d-flex align-items-center gap-2"
+                  >
+                    <FaTable size={14} />
+                    <span className="d-none d-md-inline">Table</span>
+                  </Button>
+                  <Button 
+                    variant={view === "chart" ? "primary" : "outline-primary"}
+                    onClick={handleChartClick}
+                    className="d-flex align-items-center gap-2"
+                  >
+                    <FaChartBar size={14} />
+                    <span className="d-none d-md-inline">Analytics</span>
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
 
         {/* Main Content */}
         <Card className="border-0 shadow-sm">

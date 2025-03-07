@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Fixed the import path
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { loginAPI } from "../../utils/ApiRequest";
 
@@ -14,7 +14,8 @@ import {
   Button,
   Paper,
   Link as MuiLink,
-  CircularProgress
+  CircularProgress,
+  FormHelperText
 } from "@mui/material";
 import { AccountBalanceWallet } from "@mui/icons-material";
 import Particles from "react-tsparticles";
@@ -35,6 +36,11 @@ const Login = () => {
     password: "",
   });
 
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
   const toastOptions = {
     position: "bottom-right",
     autoClose: 2000,
@@ -48,10 +54,45 @@ const Login = () => {
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
+    // Clear error when user starts typing again
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const validateForm = () => {
+    let tempErrors = {
+      email: "",
+      password: "",
+    };
+    let isValid = true;
+
+    // Email validation
+    if (!values.email) {
+      tempErrors.email = "Email is required";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      tempErrors.email = "Email is invalid";
+      isValid = false;
+    }
+
+    // Password validation
+    if (!values.password) {
+      tempErrors.password = "Password is required";
+      isValid = false;
+    }
+
+    setErrors(tempErrors);
+    return isValid;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      toast.error("Please fix the form errors", toastOptions);
+      return;
+    }
+    
     const { email, password } = values;
     setLoading(true);
 
@@ -69,7 +110,11 @@ const Login = () => {
         toast.error(data.message, toastOptions);
       }
     } catch (error) {
-      toast.error("An error occurred", toastOptions);
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message, toastOptions);
+      } else {
+        toast.error("An error occurred", toastOptions);
+      }
     } finally {
       setLoading(false);
     }
@@ -180,6 +225,8 @@ const Login = () => {
               value={values.email}
               onChange={handleChange}
               variant="outlined"
+              error={Boolean(errors.email)}
+              helperText={errors.email}
             />
             <TextField
               margin="normal"
@@ -193,6 +240,8 @@ const Login = () => {
               value={values.password}
               onChange={handleChange}
               variant="outlined"
+              error={Boolean(errors.password)}
+              helperText={errors.password}
             />
             
             <Box sx={{ mt: 2, display: "flex", flexDirection: "column", alignItems: "center" }}>

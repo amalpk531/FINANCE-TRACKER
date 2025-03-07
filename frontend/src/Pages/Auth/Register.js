@@ -14,7 +14,8 @@ import {
   Button,
   Paper,
   Link as MuiLink,
-  CircularProgress
+  CircularProgress,
+  FormHelperText
 } from "@mui/material";
 import { AccountBalanceWallet } from "@mui/icons-material";
 import Particles from "react-tsparticles";
@@ -36,6 +37,12 @@ const Register = () => {
     password: "",
   });
 
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
   const toastOptions = {
     position: "bottom-right",
     autoClose: 2000,
@@ -49,10 +56,61 @@ const Register = () => {
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
+    // Clear error when user starts typing again
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const validateForm = () => {
+    let tempErrors = {
+      name: "",
+      email: "",
+      password: "",
+    };
+    let isValid = true;
+
+    // Name validation
+    if (!values.name.trim()) {
+      tempErrors.name = "Name is required";
+      isValid = false;
+    } else if (values.name.trim().length < 3) {
+      tempErrors.name = "Name must be at least 3 characters";
+      isValid = false;
+    }
+
+    // Email validation
+    if (!values.email) {
+      tempErrors.email = "Email is required";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      tempErrors.email = "Email is invalid";
+      isValid = false;
+    }
+
+    // Password validation
+    if (!values.password) {
+      tempErrors.password = "Password is required";
+      isValid = false;
+    } else if (values.password.length < 6) {
+      tempErrors.password = "Password must be at least 6 characters";
+      isValid = false;
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(values.password)) {
+      tempErrors.password = "Password must contain uppercase, lowercase, and a number";
+      isValid = false;
+    }
+
+    setErrors(tempErrors);
+    return isValid;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      toast.error("Please fix the form errors", toastOptions);
+      return;
+    }
+    
     const { name, email, password } = values;
     setLoading(true);
 
@@ -72,7 +130,11 @@ const Register = () => {
         toast.error(data.message, toastOptions);
       }
     } catch (error) {
-      toast.error("An error occurred", toastOptions);
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message, toastOptions);
+      } else {
+        toast.error("An error occurred", toastOptions);
+      }
     } finally {
       setLoading(false);
     }
@@ -194,6 +256,8 @@ const Register = () => {
               value={values.name}
               onChange={handleChange}
               variant="outlined"
+              error={Boolean(errors.name)}
+              helperText={errors.name}
             />
             <TextField
               margin="normal"
@@ -206,6 +270,8 @@ const Register = () => {
               value={values.email}
               onChange={handleChange}
               variant="outlined"
+              error={Boolean(errors.email)}
+              helperText={errors.email}
             />
             <TextField
               margin="normal"
@@ -219,7 +285,12 @@ const Register = () => {
               value={values.password}
               onChange={handleChange}
               variant="outlined"
+              error={Boolean(errors.password)}
+              helperText={errors.password}
             />
+            <FormHelperText>
+              Password must be at least 6 characters with uppercase, lowercase, and numbers
+            </FormHelperText>
             
             <Box sx={{ mt: 2, display: "flex", flexDirection: "column", alignItems: "center" }}>
               <MuiLink 
