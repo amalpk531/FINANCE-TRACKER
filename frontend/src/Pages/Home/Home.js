@@ -59,7 +59,7 @@ const Home = () => {
   const [values, setValues] = useState({
     title: "",
     amount: "",
-    description: "",
+    description: "#description",
     category: "",
     date: format(new Date(), "yyyy-MM-dd"),
     transactionType: "",
