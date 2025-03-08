@@ -961,43 +961,46 @@ const Analytics = ({ transactions }) => {
       
       {/* Trends Tab */}
       {activeTab === "trends" && (
-        <Row>
-          <Col lg={12} className="mb-4">
-            <Card className="shadow-sm border-0">
-              <Card.Header className="bg-white pt-4 pb-0 border-bottom-0">
-                <div className="d-flex justify-content-between align-items-center">
-                  <h5 className="mb-0">30-Day Transaction Trends</h5>
-                  <div className="d-flex">
-                    <div className="d-flex align-items-center me-3">
-                      <div style={{ width: 12, height: 12, backgroundColor: '#4CAF50', marginRight: 5 }}></div>
-                      <small>Income</small>
-                    </div>
-                    <div className="d-flex align-items-center">
-                      <div style={{ width: 12, height: 12, backgroundColor: '#F44336', marginRight: 5 }}></div>
-                      <small>Expense</small>
-                    </div>
-                  </div>
-                </div>
-              </Card.Header>
-              <Card.Body>
-                <div style={{ height: '350px', overflowX: 'auto' }}>
-                  {dailyChartData.length > 0 ? (
-                    <BarChart 
-                      data={dailyChartData} 
-                      width={Math.max(800, dailyChartData.length * 20)} 
-                      height={300} 
-                    />
-                  ) : (
-                    <div className="text-center py-5">
-                      <p>No daily data available for the last 30 days</p>
-                    </div>
-                  )}
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      )}
+  <Row>
+    <Col lg={12} className="mb-4">
+      <Card className="shadow-sm border-0">
+        <Card.Header className="bg-white pt-4 pb-0 border-bottom-0">
+          <div className="d-flex justify-content-between align-items-center">
+            <h5 className="mb-0">
+              {new Date().toLocaleString("default", { month: "long" })} Transaction Trends
+            </h5>
+            <div className="d-flex">
+              <div className="d-flex align-items-center me-3">
+                <div style={{ width: 12, height: 12, backgroundColor: '#4CAF50', marginRight: 5 }}></div>
+                <small>Income</small>
+              </div>
+              <div className="d-flex align-items-center">
+                <div style={{ width: 12, height: 12, backgroundColor: '#F44336', marginRight: 5 }}></div>
+                <small>Expense</small>
+              </div>
+            </div>
+          </div>
+        </Card.Header>
+        <Card.Body>
+          <div style={{ height: '350px', overflowX: 'auto' }}>
+            {dailyChartData.length > 0 ? (
+              <BarChart 
+                data={dailyChartData} 
+                width={Math.max(800, dailyChartData.length * 20)} 
+                height={300} 
+              />
+            ) : (
+              <div className="text-center py-5">
+                <p>No data available for {new Date().toLocaleString("default", { month: "long" })}</p>
+              </div>
+            )}
+          </div>
+        </Card.Body>
+      </Card>
+    </Col>
+  </Row>
+)}
+
     </Container>
   );
 };

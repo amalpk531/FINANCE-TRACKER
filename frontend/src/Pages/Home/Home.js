@@ -43,7 +43,6 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const [frequency, setFrequency] = useState("30");
   const [type, setType] = useState("all");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -54,6 +53,20 @@ const Home = () => {
     income: 0,
     expense: 0
   });
+
+  // Function to get the number of days in the current month
+  const getDaysInCurrentMonth = () => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  };
+
+  // State for frequency, dynamically setting it to the number of days in the current month
+  const [frequency, setFrequency] = useState(getDaysInCurrentMonth());
+
+  // Update frequency whenever the month changes
+  useEffect(() => {
+    setFrequency(getDaysInCurrentMonth());
+  }, []);
 
   // Form values
   const [values, setValues] = useState({
